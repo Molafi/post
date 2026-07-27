@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ALIAS STUDY - Grid Banner</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { background:#050b18; }
+  :root{
+    --navy-0:#050b18;
+    --navy-1:#0a1830;
+    --navy-2:#0e2748;
+    --teal:#5fb6d0;
+    --teal-lt:#8fd0e2;
+    --gold:#e6c15a;
+    --gold-dp:#c99a34;
+    --ink:#dfe9f5;
+  }
+
+  /* viewport is set by JS depending on ?tile= */
+  #viewport{
+    position:relative;
+    overflow:hidden;
+    background:var(--navy-0);
+  }
+
+  /* full banner canvas 3240 x 1080 */
+  #banner{
+    position:relative;
+    width:3240px;
+    height:1080px;
+    background:
+      radial-gradient(120% 150% at 50% -20%, #143a6b 0%, #0c2247 32%, #071531 60%, #04101f 100%);
+    overflow:hidden;
+    font-family:Georgia, 'Times New Roman', serif;
+  }
+
+  /* soft vignette */
+  #banner::after{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(70% 90% at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%);
+    pointer-events:none;
+  }
+
+  /* star field */
+  .stars{position:absolute;inset:0;}
+  .stars i{position:absolute;background:#cfe3ff;border-radius:50%;opacity:.55;}
+
+  /* three-panel guides for splitting (hidden in final, toggled by ?guides=1) */
+  .guide{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,80,80,.0);z-index:99;}
+  .guide.g1{left:1080px;} .guide.g2{left:2160px;}
+
+  .panel{position:absolute;top:0;height:1080px;width:1080px;}
+  .p1{left:0;} .p2{left:1080px;} .p3{left:2160px;}
+
+  /* decorative silhouettes */
+  .deco{position:absolute;opacity:.16;}
+  .deco.gold{opacity:.20;}
+
+  /* ground skyline */
+  .ground{position:absolute;left:0;right:0;bottom:0;height:230px;
+    background:linear-gradient(180deg, rgba(9,26,52,0) 0%, #071731 55%, #050f22 100%);}
+
+  /* center glow behind logo */
+  .halo{
+    position:absolute;left:1620px;top:430px;transform:translate(-50%,-50%);
+    width:1150px;height:1150px;border-radius:50%;
+    background:radial-gradient(circle, rgba(120,200,230,.30) 0%, rgba(90,170,210,.14) 34%, rgba(40,90,140,0) 68%);
+    filter:blur(2px);
+  }
+  .beam{
+    position:absolute;left:1620px;top:60px;transform:translateX(-50%);
+    width:520px;height:520px;
+    background:conic-gradient(from 180deg at 50% 100%, rgba(150,215,235,0) 42%, rgba(150,215,235,.22) 50%, rgba(150,215,235,0) 58%);
+    filter:blur(6px);
+  }
+
+  .logo{
+    position:absolute;left:1620px;top:430px;transform:translate(-50%,-50%);
+    width:560px;height:560px;
+    filter:drop-shadow(0 0 34px rgba(120,200,230,.45));
+  }
+
+  /* bottom text bar */
+  .footer{position:absolute;left:0;right:0;bottom:118px;height:170px;
+    display:flex;align-items:center;justify-content:space-between;padding:0 210px;}
+  .tag{font-style:italic;color:#b9cbe0;font-size:40px;letter-spacing:.5px;
+       text-shadow:0 2px 10px rgba(0,0,0,.6);white-space:nowrap;}
+  .tag.left{flex:1;text-align:left;}
+  .tag.right{flex:1;text-align:right;}
+  .brand{flex:0 0 auto;text-align:center;padding:0 40px;}
+  .brand .name{
+    font-size:96px;letter-spacing:26px;color:#f2e6c2;font-weight:400;
+    text-indent:26px;text-shadow:0 3px 22px rgba(0,0,0,.6);
+    background:linear-gradient(180deg,#f6ecc8 0%, #e6c15a 60%, #c99a34 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .brand .sub{margin-top:16px;font-size:30px;letter-spacing:15px;text-indent:15px;
+     color:#9fd0e0;font-style:normal;text-transform:uppercase;}
+  /* thin gold rule under center */
+  .rule{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);
+     width:640px;height:2px;background:linear-gradient(90deg,rgba(230,193,90,0),#e6c15a 50%,rgba(230,193,90,0));}
+  .site{position:absolute;left:50%;bottom:52px;transform:translateX(-50%);
+     font-family:Arial,Helvetica,sans-serif;font-size:26px;letter-spacing:6px;color:#7fb2c8;}
+
+  /* corner divider lines flanking brand */
+  .divider{position:absolute;bottom:196px;height:1px;width:150px;background:linear-gradient(90deg,rgba(230,193,90,0),rgba(230,193,90,.7),rgba(230,193,90,0));}
+  .divider.dl{left:1015px;} .divider.dr{right:1015px;}
+</style>
+</head>
+<body>
+<div id="viewport">
+  <div id="banner">
+    <div class="stars" id="stars"></div>
+    <div class="ground"></div>
+
+    <!-- ===================== LEFT PANEL : ACADEMIC ===================== -->
+    <div class="panel p1">
+      <!-- graduation cap -->
+      <svg class="deco gold" style="left:150px;top:250px;width:230px;height:200px" viewBox="0 0 100 80">
+        <path d="M50 6 L96 26 L50 46 L4 26 Z" fill="#e6c15a"/>
+        <path d="M22 34 L22 56 C22 64 78 64 78 56 L78 34 L50 46 Z" fill="#c99a34"/>
+        <path d="M96 26 L96 50" stroke="#e6c15a" stroke-width="2"/>
+        <circle cx="96" cy="54" r="5" fill="#e6c15a"/>
+      </svg>
+      <!-- stacked books -->
+      <svg class="deco" style="left:640px;top:300px;width:300px;height:220px" viewBox="0 0 120 90">
+        <rect x="10" y="60" width="100" height="18" rx="3" fill="#5fb6d0"/>
+        <rect x="18" y="42" width="86"  height="18" rx="3" fill="#8fd0e2"/>
+        <rect x="8"  y="24" width="96"  height="18" rx="3" fill="#5fb6d0"/>
+        <rect x="14" y="60" width="6" height="18" fill="#0e2748"/>
+        <rect x="22" y="42" width="6" height="18" fill="#0e2748"/>
+        <rect x="12" y="24" width="6" height="18" fill="#0e2748"/>
+      </svg>
+      <!-- open book -->
+      <svg class="deco" style="left:250px;top:720px;width:420px;height:230px" viewBox="0 0 140 80">
+        <path d="M70 18 C50 6 24 6 8 12 L8 66 C24 60 50 60 70 72 C90 60 116 60 132 66 L132 12 C116 6 90 6 70 18 Z"
+              fill="none" stroke="#8fd0e2" stroke-width="3"/>
+        <path d="M70 18 L70 72" stroke="#8fd0e2" stroke-width="3"/>
+        <path d="M18 24 L58 20 M18 34 L58 30 M18 44 L58 40" stroke="#5fb6d0" stroke-width="2"/>
+        <path d="M82 20 L122 24 M82 30 L122 34 M82 40 L122 44" stroke="#5fb6d0" stroke-width="2"/>
+      </svg>
+      <!-- pencil -->
+      <svg class="deco gold" style="left:770px;top:660px;width:250px;height:250px" viewBox="0 0 60 60">
+        <g transform="rotate(45 30 30)">
+          <rect x="24" y="6" width="12" height="34" fill="#e6c15a"/>
+          <path d="M24 40 L36 40 L30 54 Z" fill="#d9d2c0"/>
+          <path d="M28 50 L32 50 L30 54 Z" fill="#3a3a3a"/>
+          <rect x="24" y="2" width="12" height="6" fill="#c9506a"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- ===================== CENTER PANEL : LOGO ===================== -->
+    <div class="beam"></div>
+    <div class="halo"></div>
+    <!-- constellation -->
+    <svg class="deco" style="left:1180px;top:150px;width:900px;height:360px;opacity:.28" viewBox="0 0 300 120">
+      <path d="M20 90 L70 40 L130 70 L190 25 L250 60 L285 30" fill="none" stroke="#8fd0e2" stroke-width="1.5" stroke-dasharray="4 6"/>
+      <g fill="#cfe9f5">
+        <circle cx="20" cy="90" r="3"/><circle cx="70" cy="40" r="3.5"/>
+        <circle cx="130" cy="70" r="3"/><circle cx="190" cy="25" r="4"/>
+        <circle cx="250" cy="60" r="3"/><circle cx="285" cy="30" r="3"/>
+      </g>
+    </svg>
+
+    <!-- ===== ALIAS LOGO (recreated vector) ===== -->
+    <svg class="logo" viewBox="0 0 1024 1024">
+      <defs>
+        <linearGradient id="gNavy" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#1a4a7d"/>
+          <stop offset="1" stop-color="#0c2b4e"/>
+        </linearGradient>
+        <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f3d888"/>
+          <stop offset="0.5" stop-color="#e6c15a"/>
+          <stop offset="1" stop-color="#b9862b"/>
+        </linearGradient>
+        <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#8fd0e2"/>
+          <stop offset="1" stop-color="#4f9fbb"/>
+        </linearGradient>
+        <linearGradient id="gTealDk" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#5fb6d0"/>
+          <stop offset="1" stop-color="#3d8aa6"/>
+        </linearGradient>
+      </defs>
+
+      <!-- gold star -->
+      <path d="M512,130 L530.8,184.1 L588.1,185.3 L542.4,219.9 L559,274.7 L512,242 L465,274.7 L481.6,219.9 L435.9,185.3 L493.2,184.1 Z"
+            fill="url(#gGold)"/>
+
+      <!-- navy arch (A legs) -->
+      <path d="M512,320 L628,668 L556,668 L512,430 L468,668 L396,668 Z" fill="url(#gNavy)"/>
+
+      <!-- boat: outer raised battlement blocks -->
+      <g fill="url(#gTealDk)">
+        <rect x="150" y="612" width="120" height="60" rx="6"/>
+        <rect x="754" y="612" width="120" height="60" rx="6"/>
+      </g>
+      <!-- boat main hull -->
+      <path d="M150,652 L874,652 L724,806 L300,806 Z" fill="url(#gTeal)"/>
+      <!-- hull shading center -->
+      <path d="M512,652 L724,806 L512,806 Z" fill="#4f9fbb" opacity=".35"/>
+      <!-- deck accent lines -->
+      <path d="M506,700 L286,690 M518,700 L738,690" stroke="#bfe6f0" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+
+      <!-- gold compass / pen needle -->
+      <path d="M512,405 L534,548 L512,780 L490,548 Z" fill="url(#gGold)"/>
+      <path d="M512,405 L512,780 L490,548 Z" fill="#b9862b" opacity=".45"/>
+      <!-- pivot -->
+      <circle cx="512" cy="560" r="26" fill="url(#gGold)"/>
+      <circle cx="512" cy="560" r="12" fill="#fdf6e3"/>
+      <circle cx="512" cy="560" r="5"  fill="#c99a34"/>
+    </svg>
+
+    <!-- ===================== RIGHT PANEL : TECHNICAL ===================== -->
+    <div class="panel p3">
+      <!-- circuit board -->
+      <svg class="deco" style="left:120px;top:240px;width:520px;height:360px;opacity:.20" viewBox="0 0 180 120">
+        <g stroke="#5fb6d0" stroke-width="2" fill="none">
+          <path d="M10 20 H70 V60 H120"/>
+          <path d="M10 90 H50 V50"/>
+          <path d="M120 20 H170"/>
+          <path d="M90 110 V70 H140 V30"/>
+          <path d="M140 90 H170"/>
+        </g>
+        <g fill="#8fd0e2">
+          <circle cx="10" cy="20" r="4"/><circle cx="120" cy="60" r="4"/>
+          <circle cx="10" cy="90" r="4"/><circle cx="170" cy="20" r="4"/>
+          <circle cx="90" cy="110" r="4"/><circle cx="140" cy="30" r="4"/>
+          <circle cx="170" cy="90" r="4"/><circle cx="50" cy="50" r="4"/>
+        </g>
+        <rect x="60" y="52" width="20" height="16" fill="#0e2748" stroke="#8fd0e2" stroke-width="2"/>
+      </svg>
+      <!-- code brackets -->
+      <svg class="deco gold" style="left:560px;top:300px;width:360px;height:220px" viewBox="0 0 120 70">
+        <path d="M34 8 L14 35 L34 62" fill="none" stroke="#e6c15a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M86 8 L106 35 L86 62" fill="none" stroke="#e6c15a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M66 6 L54 64" fill="none" stroke="#e6c15a" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+      <!-- atom -->
+      <svg class="deco" style="left:150px;top:660px;width:300px;height:300px" viewBox="0 0 100 100">
+        <g stroke="#8fd0e2" stroke-width="2.5" fill="none">
+          <ellipse cx="50" cy="50" rx="42" ry="16"/>
+          <ellipse cx="50" cy="50" rx="42" ry="16" transform="rotate(60 50 50)"/>
+          <ellipse cx="50" cy="50" rx="42" ry="16" transform="rotate(120 50 50)"/>
+        </g>
+        <circle cx="50" cy="50" r="7" fill="#e6c15a"/>
+      </svg>
+      <!-- rocket -->
+      <svg class="deco gold" style="left:600px;top:620px;width:250px;height:320px;opacity:.24" viewBox="0 0 80 110">
+        <path d="M40 6 C58 24 58 54 48 74 L32 74 C22 54 22 24 40 6 Z" fill="#e6c15a"/>
+        <circle cx="40" cy="36" r="9" fill="#0e2748"/>
+        <path d="M32 66 L18 84 L32 78 Z" fill="#c99a34"/>
+        <path d="M48 66 L62 84 L48 78 Z" fill="#c99a34"/>
+        <path d="M34 78 L46 78 L40 100 Z" fill="#f0a24b"/>
+      </svg>
+    </div>
+
+    <!-- ===================== FOOTER TEXT ===================== -->
+    <div class="divider dl"></div>
+    <div class="divider dr"></div>
+    <div class="footer">
+      <div class="tag left">Learn with clarity,</div>
+      <div class="brand">
+        <div class="name">ALIAS&nbsp;STUDY</div>
+        <div class="sub">Academic &amp; Technical Hub</div>
+      </div>
+      <div class="tag right">build with confidence.</div>
+    </div>
+    <div class="rule"></div>
+    <div class="site">ALIAS-STUDY.COM</div>
+
+    <!-- split guides -->
+    <div class="guide g1"></div>
+    <div class="guide g2"></div>
+  </div>
+</div>
+
+<script>
+  // starfield
+  (function(){
+    const s=document.getElementById('stars');
+    let h='';
+    for(let i=0;i<220;i++){
+      const x=Math.random()*3240, y=Math.random()*760, r=Math.random()*2.2+0.6,
+            o=Math.random()*0.6+0.2;
+      h+=`<i style="left:${x}px;top:${y}px;width:${r}px;height:${r}px;opacity:${o}"></i>`;
+    }
+    s.innerHTML=h;
+  })();
+
+  // tile / guide control via query string
+  (function(){
+    const p=new URLSearchParams(location.search);
+    const tile=p.get('tile');       // 0,1,2 or 'full'
+    const vp=document.getElementById('viewport');
+    const banner=document.getElementById('banner');
+    if(p.get('guides')==='1'){
+      document.querySelectorAll('.guide').forEach(g=>g.style.background='rgba(255,60,60,.9)');
+    }
+    if(tile==='0'||tile==='1'||tile==='2'){
+      vp.style.width='1080px'; vp.style.height='1080px';
+      banner.style.transform='translateX(-'+(1080*parseInt(tile))+'px)';
+    }else{
+      vp.style.width='3240px'; vp.style.height='1080px';
+    }
+    document.body.style.width=vp.style.width;
+    document.body.style.height=vp.style.height;
+  })();
+</script>
+</body>
+</html>
